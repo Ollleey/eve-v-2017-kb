@@ -1,0 +1,12 @@
+# generated diagnostic reports
+tools/eve-v-report_*.md
+eve-v-report_*.md
+
+# PogoWatch session logs
+tools/PogoWatch/logs/
+PogoWatch/logs/
+
+# OS cruft
+Thumbs.db
+.DS_Store
+desktop.ini
