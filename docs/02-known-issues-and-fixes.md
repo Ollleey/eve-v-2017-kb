@@ -99,20 +99,29 @@ from a community mirror. Without the amp component the speakers stay tinny.
 
 ---
 
-### 2.6 Modern Standby (S0ix) drains the battery / gets warm in a bag `[confirmed]`
+### 2.6 Modern Standby drain / random wake from sleep `[confirmed + community]`
 
 **Symptoms:** Kernel-Power events 506/507 many times per night; battery noticeably
-lower after "sleep"; warm when taken out of a bag.
+lower after "sleep"; warm in a bag; the V **wakes up on its own** during sleep.
+
+**Cause of the random wake (Eve investigated this):** the keyboard cover folded
+over the screen keeps registering keypresses and wakes the tablet. Also: inserting/
+removing the USB-C charger wakes it.
 
 **Fixes (any/all):**
-- Prefer **Hibernate** over Sleep. With Fast Startup already off:
-  `powercfg /h on` (keep hibernate available), then set the power button and lid to
-  Hibernate in Power Options.
-- `powercfg /requests` and `powercfg /systemsleepdiagnostics` /
-  `powercfg /sleepstudy` to find what's holding it awake (usually the Wi-Fi
-  adapter's armed wake).
-- `powercfg /devicequery wake_armed` → `powercfg /devicedisablewake "<name>"` for
-  anything that shouldn't wake it.
+- Device Manager → the **HID touch panel** and the **keyboard** → Power Management
+  → uncheck "Allow this device to wake the computer".
+  `powercfg /devicequery wake_armed` → `powercfg /devicedisablewake "<name>"`.
+- Prefer **Hibernate** over Sleep. With Fast Startup off: `powercfg /h on`, then set
+  the power button + lid to Hibernate in Power Options.
+- Set the **lid-close action to "Do nothing"** so folding the cover doesn't sleep it
+  (`powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS 5ca83367-6e45-459f-a27b-476b1d01c936 0`
+  and the `dc` variant, then `powercfg /setactive SCHEME_CURRENT`).
+- `powercfg /requests` / `powercfg /sleepstudy` to find what holds it awake
+  (usually the Wi-Fi adapter's armed wake).
+- Task Scheduler trick (disable touchscreen+trackpad on lock, re-enable on unlock)
+  and the beta BIOS: see
+  [8.2](08-community-findings.md#82-random-wake-from-sleep-accidental-keyboard-input).
 
 ---
 
@@ -169,12 +178,19 @@ utility.
 
 ---
 
-### 2.11 Digitizer is less sensitive than a Surface `[reported]`
+### 2.11 Digitizer — less sensitive; dead pen/touch after a Windows upgrade `[reported + community]`
 
-Pen only registers when very close to the glass (~6 mm) and palm rejection engages
-late. On ELAN units, measured: 2048 pressure levels, **no tilt**. Firmware updates
-existed that improved pen behaviour — worth chasing from a mirror if drawing is a
-priority.
+Pen only registers ~6 mm from the glass; palm rejection engages late. On ELAN
+units, measured: 2048 pressure levels, **no tilt**.
+
+- **Pen/touch stopped working after a Windows 10→11 upgrade or reinstall**
+  (System Information: "No pen or touch input is available"): Device Manager →
+  Human Interface Devices → the **Wacom** device (failed to start) → **Uninstall**
+  → **Scan for hardware changes** → Windows binds a generic HID pen + touch screen.
+  Eve-staff-confirmed fix. See [8.3](08-community-findings.md#83-touchscreen--pen-dead-after-a-windows-10--11-upgrade-or-reinstall).
+- **Sensitivity / responsiveness:** there is a separate **Touch Panel firmware**;
+  updates tweak sensitivity and are reversible. See [8.1](08-community-findings.md#81-the-v-has-five-separately-updatable-firmware-components).
+- Before wiping Windows, back up the calibration DB — [8.7](08-community-findings.md#87-calibration-backup--restore-tool-before-a-windows-reinstall).
 
 ---
 
@@ -202,3 +218,31 @@ If BIOS settings or the clock reset after the tablet sits **unplugged and off fo
 days**, the internal RTC backup cell is flat. On Thunderbolt-capable machines this
 can also revert Thunderbolt/USB-C behaviour. Replacement requires the teardown.
 Test: fully power off + unplug for 2-3 days, then check the clock.
+
+---
+
+### 2.15 Ghost touches `[reported]`
+
+**Symptoms:** phantom touch input — windows close on their own, the V "reboots" or
+loses work, often worst right after reopening the folded cover.
+
+**Causes / fixes:**
+- The lid-close magnet is weak; a protective cloth adds a gap so Windows thinks the
+  lid is open and the holding hand triggers the touchscreen/touchpad.
+- Update (or roll back) the **Touch Panel firmware** — see [8.1](08-community-findings.md#81-the-v-has-five-separately-updatable-firmware-components).
+- Apply the uninstall-Wacom / generic-HID fix from [2.11](#211-digitizer--less-sensitive-dead-pentouch-after-a-windows-upgrade-reported--community).
+- Disable the touchscreen while the session is locked
+  ([8.2](08-community-findings.md#82-random-wake-from-sleep-accidental-keyboard-input) method 2).
+
+---
+
+### 2.16 EFI Shell on boot / SSD not seen at POST `[community]`
+
+**Symptom:** you get the built-in EFI Shell instead of Windows; or "cannot find
+required map name"; or the SSD isn't detected at POST.
+
+**Fix:** reboot (type `exit` in the shell, or long-press power) → at the "made by
+us" logo press **Esc** repeatedly → BIOS/UEFI setup → either **Fn+F3** (load
+defaults) + **Fn+F4** (save & exit), or **Boot Options** → Boot Option #1 =
+"Hard Disk: Windows Boot Manager" → save & exit. Detail:
+[8.6](08-community-findings.md#86-efi-shell-on-boot--cannot-find-required-map-name--ssd-not-seen-at-post).

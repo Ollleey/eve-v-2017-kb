@@ -28,6 +28,7 @@ supports this device, so this exists to keep the useful information in one place
 | Upgrade RAM / SSD / battery / Wi-Fi | [docs/05-upgrades-and-hardware.md](docs/05-upgrades-and-hardware.md) |
 | Find drivers now that Eve is gone | [docs/06-drivers-and-bios.md](docs/06-drivers-and-bios.md) |
 | Build my own replacement keyboard | [docs/07-diy-keyboard-replacement.md](docs/07-diy-keyboard-replacement.md) |
+| See what the old Eve forum / r/evev worked out | [docs/08-community-findings.md](docs/08-community-findings.md) |
 
 ## Tools
 
@@ -47,7 +48,16 @@ supports this device, so this exists to keep the useful information in one place
 - **Biggest software win:** turn **Fast Startup off**. Many "USB stopped working",
   "won't wake", "sleep drains battery" reports trace back to hybrid-boot state on a
   machine that has not had a real cold boot in months.
-- **BIOS 5.12 (Oct 2017) is the last one** and almost certainly already installed.
+- **Random wake from sleep** is the folded keyboard cover still sending keypresses.
+  Fix in Device Manager (uncheck "allow this device to wake") - see
+  [8.2](docs/08-community-findings.md#82-random-wake-from-sleep-accidental-keyboard-input).
+- **Pen/touch dead after a Windows upgrade?** Uninstall the Wacom HID device and
+  rescan - Windows binds a working generic driver.
+  See [8.3](docs/08-community-findings.md#83-touchscreen--pen-dead-after-a-windows-10--11-upgrade-or-reinstall).
+- The V has **five** separately-flashable firmware blobs (BIOS, battery EC,
+  Thunderbolt NVM, keyboard/touchpad, touch panel) - and some old versions
+  ("firmware 1.04") **bricked displays**. Flash only what's broken.
+  See [8.1](docs/08-community-findings.md#81-the-v-has-five-separately-updatable-firmware-components).
 - **Linux:** everything works except the cameras.
 
 ## Contributing

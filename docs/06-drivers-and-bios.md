@@ -2,15 +2,31 @@
 
 Eve-Tech / Dough is defunct. `eve-tech.com` driver downloads are gone.
 
-## BIOS
+## Firmware — there are FIVE components, not just "the BIOS"
 
-- **5.12** (AMI, 2017-10-31) is the **final** BIOS and is almost certainly already
-  installed. Check: `Get-CimInstance Win32_BIOS | Select SMBIOSBIOSVersion`.
-- There is no newer one. Do not chase BIOS updates.
-- Thunderbolt settings live under `Advanced > Thunderbolt Configuration` in the
-  UEFI setup (enter with **Volume-Down** held at power-on). If USB-C / Thunderbolt
-  misbehaves: ensure Thunderbolt support is Enabled and the security level is
-  "No Security" or "User Authorization".
+The AMI SMBIOS string (`5.12`) is only the system BIOS. Eve shipped five separate
+firmware packages, each versioned on its own and each with an `instructions.pdf`.
+Full detail + cautions:
+[docs/08-community-findings.md#8.1](08-community-findings.md#81-the-v-has-five-separately-updatable-firmware-components).
+
+| Component | Update it for | Risk |
+|---|---|---|
+| **BIOS** | Spectre/Meltdown mitigation (>= `0.41`), boot fixes, the accidental-wake beta | disable Defender first; have BitLocker key; AC power |
+| **Battery EC** | faster internal-battery charging | low, optional |
+| **Thunderbolt 3 NVM** | external TB3 device compatibility / flakiness | only if a TB3 device misbehaves |
+| **Keyboard & Touchpad** | touchpad sensitivity, duplicate/dropped keys | reversible - roll back if worse |
+| **Touch Panel** | ghost touches, touch sensitivity | reversible - roll back if worse |
+
+- Check your BIOS: `Get-CimInstance Win32_BIOS | Select SMBIOSBIOSVersion`.
+- **:warning: "firmware 1.04" bricked some displays** (red stripes -> permanent
+  black). "1.06" had detection problems. Flash **only** the component you have a
+  concrete problem with, from a trusted source.
+- Thunderbolt settings: `Advanced > Thunderbolt Configuration` in UEFI setup
+  (enter with **Volume-Down** at power-on, or **Esc** repeatedly at the logo).
+  Ensure Thunderbolt support = Enabled, security level = "No Security" or
+  "User Authorization".
+- Eve V BIOS keys: **Esc** (at logo) to enter setup, **Fn+F3** load defaults,
+  **Fn+F4** save & exit.
 
 ## Drivers — where to get them now
 
@@ -21,6 +37,7 @@ Eve-Tech / Dough is defunct. `eve-tech.com` driver downloads are gone.
 | **Intel** directly | Latest **HD Graphics 615**, **Wireless-AC 8265** (Wi-Fi + BT), **Serial IO**, **Management Engine** drivers. Safe, current. |
 | **Realtek / TI** | The audio codec + **smart-amp** component. The amp part is the one usually missing; a community Eve audio package is the practical route. |
 | **Goodix** | Fingerprint. Newer than the 2017 `v1.0.20.600` may help if the sensor is alive. Community mirror. |
+| **X-Station** (`x-station.cn`) | Chinese community that also sold the "V2"; hosts a full V2 driver set + a BIOS. Forum says the machines are identical; Eve staff explicitly warned against it. Last resort, **drivers only, never the BIOS**. |
 | Third-party DBs (station-drivers, driveridentifier, etc.) | Last resort. Verify hashes, scan, prefer OEM/Intel originals. |
 | **FCC filings** (`fccid.io/2A2CZ-E134`) | Internal/external teardown photos, user manual — documentation, not drivers. |
 | **ArchWiki** `Laptop/Other` -> Eve V (2017) | For Linux. |
