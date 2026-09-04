@@ -6,6 +6,11 @@ eve-v-report_*.md
 tools/PogoWatch/logs/
 PogoWatch/logs/
 
+# EveV-FixIt: build output (shipped via Release) + generated icon
+tools/EveV-FixIt/EveV-FixIt.exe
+tools/EveV-FixIt/app.ico
+tools/EveV-FixIt/*.md.bak
+
 # OS cruft
 Thumbs.db
 .DS_Store

@@ -36,7 +36,8 @@ supports this device, so this exists to keep the useful information in one place
 
 | Tool | Purpose |
 |---|---|
-| [tools/eve-v-healthcheck.ps1](tools/eve-v-healthcheck.ps1) | One script: identifies the unit and checks every known software-fixable issue. Produces a Markdown report you can paste into an issue. |
+| **[Eve V Fix-It](tools/EveV-FixIt/)** (`EveV-FixIt.exe`, see [Releases](https://github.com/Ollleey/eve-v-2017-kb/releases)) | Portable GUI app: scans for every software-fixable issue, applies the safe fixes with confirmation, and re-verifies. Lists the hardware/firmware ones with links. Start here if you just want your tablet fixed. |
+| [tools/eve-v-healthcheck.ps1](tools/eve-v-healthcheck.ps1) | Console version: identifies the unit and checks every known software-fixable issue, writes a Markdown report. No GUI, no changes made. |
 | [tools/PogoWatch/](tools/PogoWatch/) | Live USB monitor with debug tools for diagnosing the pogo-pin keyboard without opening anything. |
 
 ## The 60-second summary

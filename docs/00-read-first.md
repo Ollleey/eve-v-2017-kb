@@ -62,10 +62,14 @@ has zero answers.
 
 1. [01 — Identify your unit](01-identify-your-unit.md). Config and digitizer batch
    change the advice.
-2. Run [`tools/eve-v-healthcheck.ps1`](../tools/eve-v-healthcheck.ps1). It checks
-   every software-fixable issue and points each finding at a section number.
-3. Go to the relevant section of [02 — Known issues and fixes](02-known-issues-and-fixes.md).
-4. For the detachable keyboard, [03](03-keyboard-and-pogo-pins.md) and
+2. **Just want it fixed?** Run [Eve V Fix-It](../tools/EveV-FixIt/) (`EveV-FixIt.exe`
+   from [Releases](https://github.com/Ollleey/eve-v-2017-kb/releases), or
+   `Start-EveV-FixIt.bat`). It scans, applies the safe fixes with confirmation, and
+   re-verifies — and shows the hardware/manual items too.
+3. Prefer the console / no changes: [`tools/eve-v-healthcheck.ps1`](../tools/eve-v-healthcheck.ps1)
+   checks every software-fixable issue and points each finding at a section number.
+4. Go to the relevant section of [02 — Known issues and fixes](02-known-issues-and-fixes.md).
+5. For the detachable keyboard, [03](03-keyboard-and-pogo-pins.md) and
    [07](07-diy-keyboard-replacement.md).
-5. [08 — Community findings](08-community-findings.md) for the stuff the old forum
+6. [08 — Community findings](08-community-findings.md) for the stuff the old forum
    worked out (firmware, wake bugs, ghost touches, EFI-shell recovery).
