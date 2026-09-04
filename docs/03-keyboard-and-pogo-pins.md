@@ -1,5 +1,13 @@
 # 3 — Keyboard and pogo pins
 
+> ⚠️ **Read [00-read-first](00-read-first.md) before opening anything.** This is
+> community guesswork from one unit, not an official manual. Pin counts, the pinout,
+> and the failure mode described here are **not verified** — measure your own
+> hardware. The keyboard has a LiPo cell: a swollen one must not be charged,
+> pressed, or punctured. iFixit disassembly guide:
+> <https://www.ifixit.com/Guide/EVE+V+Keyboard+Disassembly/126817>. You do this at
+> your own risk.
+
 ## How the keyboard connects
 
 The Eve V detachable keyboard is a **standard USB HID composite device**

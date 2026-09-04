@@ -19,6 +19,8 @@ supports this device, so this exists to keep the useful information in one place
 
 ## Start here
 
+**→ [docs/00-read-first.md](docs/00-read-first.md) — accuracy caveats + safety. Read before any hardware work.**
+
 | I want to… | Go to |
 |---|---|
 | Find out exactly which Eve V I have | [docs/01-identify-your-unit.md](docs/01-identify-your-unit.md) |

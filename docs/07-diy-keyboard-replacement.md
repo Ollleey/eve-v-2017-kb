@@ -1,5 +1,13 @@
 # 7 — DIY keyboard replacement
 
+> ⚠️ **Read [00-read-first](00-read-first.md) first.** This chapter is
+> speculative — **nobody has published a working Eve V pogo pinout or a finished
+> DIY keyboard.** The wiring, the detect-pin behaviour, and "the pogo VBUS is safe
+> to power an MCU from" are **assumptions**, not tested facts. Get the pinout wrong
+> and you can back-feed voltage into the tablet's USB PHY. Verify every connection
+> with a multimeter against your own donor keyboard first. LiPo safety applies.
+> Your risk.
+
 For a dead detachable keyboard. Tiered by effort — do the cheap tests first.
 
 ## Decision tree

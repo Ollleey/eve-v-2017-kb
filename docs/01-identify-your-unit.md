@@ -48,9 +48,10 @@ shipped late 2017 / early 2018.
 
 ## Digitizer — the important batch difference
 
-Early original units: **Wacom AES** active pen.
-Later original units (and the 2021 relaunch stock): **ELAN** digitizer, hardware ID
-`HID\VID_04F3&DEV_200A`.
+Units shipped with one of two digitizers — **Wacom AES** or **ELAN**
+(`HID\VID_04F3&DEV_200A`). The common understanding is that early units got Wacom
+and later ones ELAN (matching the "Eve V Pen" supply mess), but the exact cutoff is
+**not documented** — check yours, don't assume from the ship date.
 
 Check yours:
 

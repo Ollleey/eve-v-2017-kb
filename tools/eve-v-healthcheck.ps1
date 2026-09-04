@@ -24,6 +24,9 @@ $admin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 L "# Eve V health check"
 L ("_generated {0}  |  admin: {1}_" -f (Get-Date -Format 'yyyy-MM-dd HH:mm'), $admin)
+L ""
+L "> Heuristic checks against community notes built from one unit. Findings can be"
+L "> wrong or not apply to your batch. Confirm before acting. See docs/00-read-first.md."
 
 # ---------------------------------------------------------------- identity
 H "Identity"

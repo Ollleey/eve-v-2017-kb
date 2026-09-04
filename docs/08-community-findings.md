@@ -6,6 +6,11 @@ Fixes and information the Eve V community worked out, mostly on the now-dead
 > The original forum is gone (HTTP 410). Every link below is a
 > `web.archive.org` snapshot. If a snapshot 404s, try a different year:
 > `https://web.archive.org/web/2020/<original-url>`.
+>
+> ⚠️ These are **forum posts from 2018-2022**, some from Eve staff, many from
+> users. Advice may be outdated, wrong, or for a different batch. **Firmware
+> flashing here can brick your device** (see 8.1). Treat as leads to verify, not
+> instructions. See [00-read-first](00-read-first.md).
 
 ---
 

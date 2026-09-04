@@ -1,5 +1,11 @@
 # 5 — Upgrades and hardware
 
+> ⚠️ **Read [00-read-first](00-read-first.md) first.** Opening the tablet means
+> prying a **glued display** with a **LiPo battery directly underneath it** — real
+> fire and injury risk, and there is **no iFixit guide for the Eve V tablet**
+> (people improvise from Surface Pro 4/5 teardowns). Part numbers and dimensions
+> below are best-effort from one unit; verify before buying. Your risk.
+
 ## What can and cannot be changed
 
 | Part | Upgradeable? | Detail |
