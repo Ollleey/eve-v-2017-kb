@@ -489,8 +489,8 @@ $script:Checks = @(
 [xml]$xaml = @'
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Eve V Fix-It" Height="760" Width="920" MinHeight="520" MinWidth="720"
-        WindowStartupLocation="CenterScreen" Background="#FF16171A"
+        Title="Eve V Fix-It" Height="720" Width="880" MinHeight="500" MinWidth="680"
+        WindowStartupLocation="Manual" Background="#FF16171A"
         FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="13" TextOptions.TextFormattingMode="Ideal">
   <Window.Resources>
     <SolidColorBrush x:Key="Card"   Color="#FF212227"/>
@@ -830,6 +830,14 @@ $script:BtnReboot.Add_Click({ if (Confirm-Box 'Restart Windows now?') { Restart-
 $script:LinkReadFirst.Add_Click({ Open-Url ($script:RepoBase + 'docs/00-read-first.md') })
 if (-not $script:IsAdmin) { $script:BtnFixAll.IsEnabled = $false }
 
+$win.Add_SourceInitialized({
+    try {
+        $sw = [System.Windows.SystemParameters]::PrimaryScreenWidth
+        $sh = [System.Windows.SystemParameters]::PrimaryScreenHeight
+        $win.Left = [Math]::Max(0, ($sw - $win.Width)  / 2)
+        $win.Top  = [Math]::Max(0, ($sh - $win.Height) / 2)
+    } catch {}
+})
 $win.Add_ContentRendered({
     Write-Log ("Eve V Fix-It v{0} started (admin: {1})" -f $script:Version, $script:IsAdmin) info
     Start-Scan
