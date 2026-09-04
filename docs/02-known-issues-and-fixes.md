@@ -249,27 +249,33 @@ defaults) + **Fn+F4** (save & exit), or **Boot Options** → Boot Option #1 =
 
 ---
 
-### 2.17 USB-C data / Thunderbolt completely dead `[confirmed on one unit]`
+### 2.17 The Thunderbolt / Alpine Ridge controller "disappears" `[confirmed — not a fault]`
 
-**Symptoms:** neither USB-C port does data or DisplayPort-out; no Thunderbolt
-devices work; Device Manager shows **only one** USB xHCI controller; in
-`Get-PnpDeviceProperty` the PCIe root port #1 (`DEV_9D10`) has **no child device**.
-USB-C **charging still works** (separate PD controller). USB-A and the pogo keyboard
-are unaffected (they're on the PCH controller).
+**What you see:** with **nothing plugged into either USB-C port**, Device Manager
+shows only **one** USB xHCI controller; `Get-PnpDeviceProperty` on PCIe root port #1
+(`DEV_9D10`) shows **no child**; there is no Thunderbolt / Alpine Ridge device
+anywhere, not even a phantom. It looks like the controller is missing.
 
-**Cause:** both USB-C ports and Thunderbolt on the Eve V route through the Intel
-**Alpine Ridge (JHL6240)** controller. It has fallen off / is not enumerating on
-the PCI bus.
+**This is normal.** The Eve V puts the Intel **Alpine Ridge (JHL6240)** controller
+into **runtime D3 / RTD3** and powers it fully off the PCI bus whenever no USB-C
+device is connected — a power-saving measure for the fanless design.
 
-**Fixes, in order:**
-1. **Full cold shutdown** (not restart) — hold power ~20 s, wait, power on. Fast
-   Startup being off (2.1) helps here.
-2. **UEFI:** Volume-Down at power-on (or **Esc** repeatedly) → `Advanced →
-   Thunderbolt Configuration` → Thunderbolt support **Enabled**, security level
-   "No Security" or "User Authorization" → save (**Fn+F4**) → cold boot.
-3. If settings don't stick → dead RTC cell (2.14).
-4. If the controller is still absent after a confirmed-Enabled setting **and** a
-   cold boot → the Alpine Ridge chip is likely dead (mainboard-level fault). No OS
-   fix; the USB-C ports stay data-dead. Charging and both USB-A ports keep working.
+**Plug anything into a USB-C port** and PCIe hotplug on root port #1 brings it
+straight back:
+```
+Intel(R) USB 3.1 eXtensible Host Controller - 1.10   PCI\VEN_8086&DEV_15DB...
++ a second "USB Root Hub (USB 3.0)"
+```
+USB-C data, USB-C hubs/docks, Thunderbolt and USB-C DisplayPort-out all work once
+the controller has woken.
 
-Same behaviour on Linux — see [4.8](04-linux.md#48-usb-c--thunderbolt--the-alpine-ridge-problem).
+**Only treat it as a fault if** a USB-C device that you know works elsewhere still
+does nothing after being plugged in **and** the `DEV_15DB` controller never appears.
+Then: cold boot → check `Advanced → Thunderbolt Configuration` is Enabled in UEFI →
+cold boot again. If the controller still never wakes on hotplug, the Alpine Ridge
+chip may be failing.
+
+**Do not diagnose USB-C with nothing plugged in** — you will always see the
+powered-down state and wrongly conclude the port is dead.
+
+Same behaviour on Linux — see [4.8](04-linux.md#48-usb-c--thunderbolt).

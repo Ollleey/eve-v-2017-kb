@@ -42,7 +42,7 @@ For the value of a 2017 tablet, the risk/reward on the internal SSD swap is poor
 | Item | Why | ~Price |
 |---|---|---|
 | **External NVMe in a USB-C / TB3 enclosure** | fast storage, backup target, or boot Linux off it and bypass the flaky internal SSD entirely | enclosure EUR 20 + drive EUR 55 |
-| **USB-C hub / Thunderbolt 3 dock** | only 2x USB-A + 1x USB-C data on the tablet. TB3 dock = one cable for displays + peripherals + charging | hub EUR 35 / TB3 dock EUR 100-130 |
+| **USB-C hub / Thunderbolt 3 dock** | 2x USB-A + 2x USB-C on the tablet; a TB3 dock gives one cable for displays + peripherals + charging. The Alpine Ridge controller wakes on hotplug ([2.17](docs/02-known-issues-and-fixes.md#217-the-thunderbolt--alpine-ridge-controller-disappears)). | hub EUR 35 / TB3 dock EUR 100-130 |
 | **65 W GaN USB-C charger** | the Eve V charges over USB-C PD; a modern charger is small and gives headroom over the 45 W original | EUR 30 |
 | **USB-C -> HDMI/DP cable** | the USB-C port does DP Alt Mode -> external display directly | EUR 12 |
 | **Stand / VESA mount** | unlocks wall-dashboard / desk-monitor / kitchen-display reuse | EUR 15-20 |

@@ -7,13 +7,11 @@ match them against `lspci -nn`, `lsusb`, and `ls /sys/bus/acpi/devices` on your 
 
 **Daily-driver viable on a modern distro.** GPU, Wi-Fi, Bluetooth, storage, USB-A,
 touchscreen, pen, sensors, audio output, suspend all work — most with zero config
-on kernel 6.6+. Two real gaps:
+on kernel 6.6+. One real gap:
 
-1. **Cameras** — front + rear need manual work (Intel IPU3, same as Surface Pro 5).
-2. **USB-C data / Thunderbolt** — on this unit the Alpine Ridge controller is **not
-   on the PCI bus at all** (see [4.8](#48-usb-c--thunderbolt--the-alpine-ridge-problem)).
-   That is a firmware/hardware issue Linux cannot fix, and it is the same on Windows.
+- **Cameras** — front + rear need manual work (Intel IPU3, same as Surface Pro 5).
 
+USB-C / Thunderbolt works (the controller sleeps when idle — [4.8](#48-usb-c--thunderbolt)).
 Speaker volume needs a tweak. Auto-rotation needs a quirk. Everything else is fine.
 
 ---
@@ -46,7 +44,7 @@ Speaker volume needs a tweak. Auto-rotation needs a quirk. Everything else is fi
 | Rear cam **OV5648** | `OVTI5648` | `ov5648` | ❌ oob | see [4.4](#44-cameras--the-hard-part) |
 | Camera PMIC / clocks | `INT3472` | `intel_skl_int3472` | needed for cams | kernel 5.16+ |
 | Image processor **IPU3** | `8086:1919` + CIO2 `8086:9D32` | `ipu3-imgu` + `ipu3-cio2` + libcamera | ❌ oob | see [4.4](#44-cameras--the-hard-part) |
-| Alpine Ridge TB3 / USB-C | (absent on this unit) | `thunderbolt`, `xhci` | ❌ | see [4.8](#48-usb-c--thunderbolt--the-alpine-ridge-problem) |
+| Alpine Ridge TB3 / USB-C xHCI | `8086:15DB` (appears on hotplug) | `xhci_pci`, `thunderbolt`, `bolt` | ✅ | none — see [4.8](#48-usb-c--thunderbolt) |
 | Detachable keyboard (Novatek) | USB `0603:00F1` | `usbhid` / `hid-generic` | ✅ if hardware alive | see [4.9](#49-keyboard--pogo-pins) |
 
 ---
@@ -182,25 +180,26 @@ Reference: [linux-surface IPU3 camera discussion #1352](https://github.com/linux
 
 ---
 
-## 4.8 USB-C / Thunderbolt — the Alpine Ridge problem
+## 4.8 USB-C / Thunderbolt
 
-On this unit the **Intel Alpine Ridge (JHL6240) Thunderbolt 3 controller is absent
-from the PCI bus** — PCIe root port #1 has no child device, and there is only one
-xHCI controller. Both USB-C ports and Thunderbolt route through that chip.
+Both USB-C ports and Thunderbolt route through the Intel **Alpine Ridge (JHL6240)**
+controller. It works — but the Eve V puts it into **runtime D3 (RTD3)** and powers
+it fully off the PCI bus while nothing is plugged into either USB-C port. So with
+USB-C idle you will see **no** second xHCI, **no** Thunderbolt device, and an empty
+PCIe root port #1. **That is the power-saved state, not a fault** — see
+[issue 2.17](02-known-issues-and-fixes.md#217-the-thunderbolt--alpine-ridge-controller-disappears).
 
-Consequences, **identical on Windows and Linux**:
-- USB-C **data** (both ports): dead
-- **Thunderbolt** devices / eGPU / TB docks: dead
-- USB-C **DisplayPort-out**: dead
-- USB-C **charging (PD)**: still works — handled by a separate PD controller
+Plug a device into a USB-C port and it comes up:
+- second xHCI `8086:15DB` → `xhci_pci` → USB-C data + hubs/docks
+- `thunderbolt` + `bolt` (install `bolt`) → Thunderbolt devices; authorise with
+  `boltctl` or the GNOME/KDE Thunderbolt UI
+- DisplayPort-alt-mode out works through the same controller
 
-**Before blaming Linux for "USB-C doesn't work", fix this on the firmware side:**
-enter UEFI setup (Volume-Down at power-on, or Esc repeatedly), `Advanced →
-Thunderbolt Configuration`, make sure Thunderbolt support is **Enabled** and the
-security level is "No Security" / "User Authorization". Save, full power cycle. If
-the controller comes back it will work on both OSes; `thunderbolt` + `bolt` handle
-it on Linux. If it stays absent after a confirmed-enabled BIOS setting and a cold
-boot, the Alpine Ridge chip is likely dead — a mainboard fault, not an OS issue.
+If RTD3 causes trouble on an older kernel (device not waking on hotplug), boot with
+`pcie_port_pm=off` or `thunderbolt.host_reset=0` as a test — not normally needed on
+6.6+.
+
+Everything about USB-C is the same on Windows and Linux here.
 
 ---
 
@@ -245,13 +244,11 @@ boot, the Alpine Ridge chip is likely dead — a mainboard fault, not an OS issu
 1. Boot the live image (USB-A works).
 2. Check, in order: **Wi-Fi → Bluetooth → speaker + headphone audio →
    touchscreen → pen pressure (open Krita) → screen rotation → suspend/resume →
-   the microSD reader**.
-3. Then the two question marks for your use: **cameras** and, if you need it,
-   **USB-C data** (plug a USB-C stick — expect nothing until the Alpine Ridge issue
-   in [4.8](#48-usb-c--thunderbolt--the-alpine-ridge-problem) is resolved).
+   the microSD reader → a USB-C device** (stick or dock — the Alpine Ridge
+   controller wakes on hotplug).
+3. The one question mark for your use: **cameras**.
 4. If audio is quiet, that's expected — [4.5](#45-audio) fixes it post-install; it's
    not a reason to abandon the install.
 
-Only commit once the must-haves pass. Install onto an **external USB-C NVMe** if you
-want to keep the Windows install intact — but note USB-C data being dead means you'd
-be booting from a USB-**A** enclosure instead.
+Only commit once the must-haves pass. Install onto an **external USB NVMe** if you
+want to keep the Windows install intact (a USB-A or USB-C enclosure both work).

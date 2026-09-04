@@ -58,12 +58,11 @@ supports this device, so this exists to keep the useful information in one place
   Thunderbolt NVM, keyboard/touchpad, touch panel) - and some old versions
   ("firmware 1.04") **bricked displays**. Flash only what's broken.
   See [8.1](docs/08-community-findings.md#81-the-v-has-five-separately-updatable-firmware-components).
-- **Linux:** daily-driver viable on kernel 6.6+. Cameras need manual work; USB-C
-  data works only if the Thunderbolt controller is actually enumerating (see below).
-- **USB-C data / Thunderbolt dead?** Both USB-C ports route through the Alpine Ridge
-  controller. If it has fallen off the PCI bus (empty PCIe root port #1, only one
-  xHCI), check `Advanced > Thunderbolt Configuration` in UEFI. Same symptom on
-  Windows and Linux. Charging is separate and keeps working.
+- **Linux:** daily-driver viable on kernel 6.6+. Only the cameras need real work.
+- **"The Thunderbolt controller is missing!"** — no, it's asleep. The Alpine Ridge
+  chip powers fully off the PCI bus when nothing is plugged into either USB-C port
+  (RTD3). Plug in a USB-C device and it comes back. Don't diagnose USB-C with
+  nothing connected. ([issue 2.17](docs/02-known-issues-and-fixes.md#217-the-thunderbolt--alpine-ridge-controller-disappears))
 
 ## Contributing
 
