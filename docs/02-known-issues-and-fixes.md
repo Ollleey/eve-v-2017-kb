@@ -68,7 +68,11 @@ stalls.
 **Fix:**
 1. Back up first.
 2. `chkdsk C: /f` → answer `Y` → reboot. It runs offline before Windows, ~5-20 min.
-3. If ID-7 bursts recur: move the working OS/data to an **external USB-C NVMe**
+3. The 600p is slow at random reads and Windows lets its filesystem fragment
+   badly (seen: 26%). A monthly `Optimize-Volume -DriveLetter C -ReTrim` (safe,
+   just TRIM) plus letting the scheduled "Optimize Drives" task run helps boot and
+   general responsiveness. `[reported]`
+4. If ID-7 bursts recur: move the working OS/data to an **external USB NVMe**
    (see [05](05-upgrades-and-hardware.md)) rather than trusting the internal drive.
 
 ---
