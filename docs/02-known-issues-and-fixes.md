@@ -246,3 +246,30 @@ us" logo press **Esc** repeatedly → BIOS/UEFI setup → either **Fn+F3** (load
 defaults) + **Fn+F4** (save & exit), or **Boot Options** → Boot Option #1 =
 "Hard Disk: Windows Boot Manager" → save & exit. Detail:
 [8.6](08-community-findings.md#86-efi-shell-on-boot--cannot-find-required-map-name--ssd-not-seen-at-post).
+
+---
+
+### 2.17 USB-C data / Thunderbolt completely dead `[confirmed on one unit]`
+
+**Symptoms:** neither USB-C port does data or DisplayPort-out; no Thunderbolt
+devices work; Device Manager shows **only one** USB xHCI controller; in
+`Get-PnpDeviceProperty` the PCIe root port #1 (`DEV_9D10`) has **no child device**.
+USB-C **charging still works** (separate PD controller). USB-A and the pogo keyboard
+are unaffected (they're on the PCH controller).
+
+**Cause:** both USB-C ports and Thunderbolt on the Eve V route through the Intel
+**Alpine Ridge (JHL6240)** controller. It has fallen off / is not enumerating on
+the PCI bus.
+
+**Fixes, in order:**
+1. **Full cold shutdown** (not restart) — hold power ~20 s, wait, power on. Fast
+   Startup being off (2.1) helps here.
+2. **UEFI:** Volume-Down at power-on (or **Esc** repeatedly) → `Advanced →
+   Thunderbolt Configuration` → Thunderbolt support **Enabled**, security level
+   "No Security" or "User Authorization" → save (**Fn+F4**) → cold boot.
+3. If settings don't stick → dead RTC cell (2.14).
+4. If the controller is still absent after a confirmed-Enabled setting **and** a
+   cold boot → the Alpine Ridge chip is likely dead (mainboard-level fault). No OS
+   fix; the USB-C ports stay data-dead. Charging and both USB-A ports keep working.
+
+Same behaviour on Linux — see [4.8](04-linux.md#48-usb-c--thunderbolt--the-alpine-ridge-problem).
